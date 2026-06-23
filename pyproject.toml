@@ -18,8 +18,3 @@ dependencies = [
     "motor (>=3.7.1,<4.0.0)",
     "beautifulsoup4 (>=4.14.3,<5.0.0)"
 ]
-
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
