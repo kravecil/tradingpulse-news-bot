@@ -8,9 +8,4 @@ class Article:
     link: str
     summary: str
     published_at: datetime
-    source: str
-    category: str
-    content: str
-
-    summary_ru: str | None = None
-    sentiment: str | None = None
+    content: str | None = None
