@@ -30,5 +30,21 @@ class Settings(BaseSettings):
         examples=["b1g2h3i4j5k6l7m8n9"],
     )
 
+    openai_model: str = Field(
+        default="yandexgpt",
+        description="Модель OpenAI для генерации текста",
+        examples=["gpt-4o-mini", "yandexgpt"],
+    )
+
+    openai_base_url: str = Field(
+        default="https://ai.api.cloud.yandex.net/v1",
+        description="Базовый URL для OpenAI API",
+        examples=["https://ai.api.cloud.yandex.net/v1"],
+    )
+
+    maximum_message_length: int = Field(
+        default=4096, description="Максимальная длина сообщения", examples=[4096]
+    )
+
 
 settings = Settings()
