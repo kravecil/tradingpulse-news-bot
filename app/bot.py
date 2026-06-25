@@ -20,22 +20,13 @@ class Bot:
         self.bot = MaxBot(token=token, parse_mode=ParseMode.MARKDOWN)
         self.chat_id = settings.chat_id
 
-        if self.chat_id is None:
-            raise ValueError("Chat ID is not configured")
-
         self.maximum_message_length = settings.maximum_message_length
 
     async def send(self, text: str | None) -> None:
         if text is None:
             return
 
-        if not isinstance(text, str):
-            raise TypeError("text must be a string")
-
-        if len(text) > self.maximum_message_length:
-            raise ValueError(
-                f"text length ({len(text)}) exceeds maximum allowed ({self.maximum_message_length})"
-            )
+        text = text[: self.maximum_message_length]
 
         try:
             await self.bot.send_message(

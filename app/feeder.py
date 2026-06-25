@@ -13,7 +13,7 @@ MAX_RSS = 10
 RSS_URL = "https://cointelegraph.com/rss"
 
 
-async def fetch_rss():
+async def fetch_articles() -> list[Article]:
     logger.info(f"Fetching RSS feed: {RSS_URL}")
     try:
         feed = await asyncio.to_thread(feedparser.parse, RSS_URL)

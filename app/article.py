@@ -1,11 +1,12 @@
-from dataclasses import dataclass
 from datetime import datetime
 
+from pydantic import BaseModel, HttpUrl
 
-@dataclass
-class Article:
+
+class Article(BaseModel):
     title: str
-    link: str
+    link: HttpUrl
     summary: str
     published_at: datetime
+
     content: str | None = None
