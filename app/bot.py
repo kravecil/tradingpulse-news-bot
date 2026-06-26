@@ -33,6 +33,7 @@ class Bot:
                 chat_id=self.chat_id,
                 text=text,
             )
+            logger.info("Message sent")
         except Exception as e:
             logger.error(f"Failed to send message: {e!s}")
 
