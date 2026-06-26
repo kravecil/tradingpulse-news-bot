@@ -61,7 +61,7 @@ async def fetch_articles() -> list[Article]:
 
             guid = int(entry["guid"])  # pyright: ignore[reportArgumentType]
             if guid == 1:
-                break
+                continue
 
             published_dt = datetime.now(timezone.utc)
             if hasattr(entry, "published_parsed") and entry.published_parsed:
