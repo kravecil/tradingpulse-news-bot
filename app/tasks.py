@@ -21,11 +21,15 @@ async def publish():
         db_articles = await repo.get_articles_by_pub_date(article_pub_dates)
         db_article_pub_dates = [article.published_at for article in db_articles]
 
+        logger.info("DB articles count: %s", len(db_article_pub_dates))
+
         filtered_articles = [
             article
             for article in fetched_articles
             if article.published_at not in db_article_pub_dates
         ]
+
+        logger.info("Filtered articles count: %s", len(filtered_articles))
 
         articles = sorted(filtered_articles, key=lambda x: x.published_at)
 
