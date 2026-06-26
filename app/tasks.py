@@ -21,19 +21,29 @@ async def publish():
         db_articles = await repo.get_articles_by_guids(article_guids)
         db_article_guids = [article.guid for article in db_articles]
 
-    filtered_articles = [
-        article for article in fetched_articles if article.guid not in db_article_guids
-    ]
+        filtered_articles = [
+            article
+            for article in fetched_articles
+            if article.guid not in db_article_guids
+        ]
 
-    articles = sorted(filtered_articles, key=lambda x: x.published_at, reverse=True)
+        articles = sorted(filtered_articles, key=lambda x: x.published_at, reverse=True)
 
-    bot = create_bot()
+        bot = create_bot()
 
-    async with YandexGPTAdapter() as adapter:
-        generator = PostGenerator(adapter)
+        async with YandexGPTAdapter() as adapter:
+            generator = PostGenerator(adapter)
 
-        for article in articles:
-            post = await generator.process([article])
-            await bot.send(post.content)
+            for article in articles:
+                try:
+                    post = await generator.process([article])
+                    await bot.send(post.content)
+
+                    await repo.create_article(article.guid, article.published_at)
+                except Exception as e:
+                    logger.error(
+                        f"Error while processing article {article.guid}: {e}",
+                        exc_info=True,
+                    )
 
     logger.info("Publish task completed")
