@@ -11,9 +11,10 @@ db = AsyncSqliteDatabase(settings.db_sqlite)
 
 class Article(db.Model):
     id = peewee.AutoField(primary_key=True)
-    guid = peewee.IntegerField(unique=True)
 
-    published_at = peewee.DateTimeField()
+    link = peewee.TextField()
+
+    published_at = peewee.DateTimeField(unique=True)
     created_at = peewee.DateTimeField(default=datetime.now())
 
 
@@ -41,16 +42,16 @@ class ArticleRepository:
     def __init__(self, manager: DBManager) -> None:
         self.manager = manager
 
-    async def get_articles_by_guids(self, guids: list[int]) -> list[Article]:
-        query = Article.select().where(Article.guid.in_(guids))
+    async def get_articles_by_pub_date(self, dates: list[datetime]) -> list[Article]:
+        query = Article.select().where(Article.published_at.in_(dates))
 
         articles = await self.manager.db.list(query)
 
         return articles  # type: ignore
 
-    async def create_article(self, guid: int, published_at: datetime) -> Article:
+    async def create_article(self, published_at: datetime, link: str) -> Article:
         async with self.manager.db.atomic():
-            article = await Article.acreate(guid=guid, published_at=published_at)
+            article = await Article.acreate(published_at=published_at, link=link)
 
         return article  # type: ignore
 

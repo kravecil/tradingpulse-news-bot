@@ -4,8 +4,6 @@ from pydantic import BaseModel, HttpUrl
 
 
 class Article(BaseModel):
-    guid: int
-
     title: str
     link: HttpUrl
     summary: str
