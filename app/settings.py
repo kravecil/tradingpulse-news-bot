@@ -44,5 +44,11 @@ class Settings(BaseSettings):
         default=4096, description="Максимальная длина сообщения", examples=[4096]
     )
 
+    db_sqlite: str = Field(
+        default="db.sqlite",
+        description="Файл базы данных SQLite",
+        examples=["db.sqlite"],
+    )
+
 
 settings = Settings()  # type: ignore
