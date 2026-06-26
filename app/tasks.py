@@ -27,7 +27,7 @@ async def publish():
             if article.guid not in db_article_guids
         ]
 
-        articles = sorted(filtered_articles, key=lambda x: x.published_at, reverse=True)
+        articles = sorted(filtered_articles, key=lambda x: x.published_at)
 
         bot = create_bot()
 
