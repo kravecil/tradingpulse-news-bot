@@ -30,12 +30,12 @@ dev = [
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
-exclude = exclude = [
+exclude = [
     "__debug_scripts__",
     "**/node_modules",
     "**/__pycache__",
-    "src/experimental",
-    "src/typestubs"
+    "**/.*",
+    ".venv"
 ]
 
 
