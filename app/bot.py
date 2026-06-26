@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from maxapi import Bot as MaxBot
@@ -34,6 +35,8 @@ class Bot:
                 text=text,
             )
             logger.info("Message sent")
+
+            await asyncio.sleep(1)
         except Exception as e:
             logger.error(f"Failed to send message: {e!s}")
 
