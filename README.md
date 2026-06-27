@@ -1,62 +1,35 @@
 # TradingPulse News MAX BOT
 
-A sophisticated news aggregation and distribution bot for the cryptocurrency and financial markets, built as a MAX BOT using the `maxapi` library.
+Бот-агргатор новостей с информационных площадок. Бот получает список новостей с RSS ленты, отфильтровывает существующие в базе данных, а новые прогоняет через YandexGPT и постит в канал мессенджера. 
 
-This bot fetches news from various sources (RSS feeds, Reddit, DefiLlama) and uses Yandex GPT to summarize, translate, and analyze the content before sending it to a Telegram channel.
+Поддерживаемые площадки (будут добавляться):
+- [cointelegraph.com](https://cointelegraph.com/)
 
-## Features
+Поддерживаемые мессенджеры (будут добавляться):
+- [МАКС](https://max.ru/)
 
-*   **Multi-Source Aggregation**: Pulls news from RSS feeds (CoinTelegraph, CoinDesk), Reddit communities, and DeFi API data.
-*   **AI-Powered Processing**: Uses Yandex GPT to summarize articles in Russian and determine sentiment.
-*   **Automated Telegram Distribution**: Sends curated newsletters to a designated Telegram channel at regular intervals.
-*   **Configurable**: All settings (sources, intervals, AI service) are managed through a configuration file and environment variables.
-*   **Modular Design**: Clean separation of concerns with distinct modules for sources, processing, and the bot logic.
 
-## Project Structure
+## Установка и деплой
 
-```
-tradingpulse-news/
-├── pyproject.toml           # Project configuration and dependencies
-├── .env.example             # Example environment variables
-├── README.md                # This file
-└── src/
-    └── tradingpulse_news/
-        ├── __init__.py
-        ├── __main__.py        # Entry point for the script
-        ├── config.py          # Configuration management
-        ├── bot.py             # Main bot logic and orchestration
-        ├── processor.py       # AI processing with Yandex GPT
-        └── sources/
-            ├── base.py        # Abstract base class for sources
-            ├── rss.py         # RSS feed source
-            └── social.py      # Social and API sources (Reddit, DefiLlama)
-```
+Требуется: [Docker](https://www.docker.com/)
 
-## Setup
-
-1.  **Clone the repository**:
+1.  **Клонировать репозиторий**:
     ```bash
     git clone https://github.com/your-username/tradingpulse-news.git
     cd tradingpulse-news
     ```
 
-2.  **Create a virtual environment and install dependencies**:
-    ```bash
-    poetry install
-    ```
-
-3.  **Configure environment variables**:
-    Copy `.env.example` to `.env` and fill in your credentials:
+2.  **Сконфигурировать переменные окружения**:
     ```bash
     cp .env.example .env
-    # Edit .env with your values
+    # Отредактируйте .env своими значениями
     ```
 
-    *   `TELEGRAM_BOT_TOKEN`: Your Telegram bot token from @BotFather.
-    *   `TELEGRAM_CHAT_ID`: The ID of the Telegram channel/group to send news to.
-    *   `YANDEX_FOLDER_ID` & `YANDEX_API_KEY`: Your Yandex Cloud credentials for Yandex GPT.
+    *   `BOT_TOKEN`: Ваш токен бота.
+    *   `CHAT_ID`: Идентификатор канала, куда отправлять посты.
+    *   `YANDEX_API_KEY` & `YANDEX_FOLDER_ID`: Ваши учётные данные Yandex Cloud для доступа к Yandex GPT.
 
-4.  **Run the bot**:
+4.  **Сборка и запуск**:
     ```bash
-    poetry run python -m tradingpulse_news
+    docker compose up -d --build
     ```
