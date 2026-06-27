@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     )
 
     openai_model: str = Field(
-        default="yandexgpt",
+        default="yandexgpt/latest",
         description="Модель OpenAI для генерации текста",
         examples=["gpt-4o-mini", "yandexgpt"],
     )
