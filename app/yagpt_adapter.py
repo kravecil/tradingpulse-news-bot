@@ -2,7 +2,11 @@ import logging
 from typing import Self
 
 from openai import AsyncOpenAI
-from openai.types.responses import Response, ResponseOutputMessage, ResponseOutputText
+from openai.types.chat import (
+    ChatCompletionSystemMessageParam,
+    ChatCompletionUserMessageParam,
+)
+from openai.types.chat.chat_completion import ChatCompletion, Choice
 
 from app.settings import settings
 
@@ -39,25 +43,36 @@ class YandexGPTAdapter:
             raise ValueError("Yandex GPT client is not initialized")
 
         try:
-            response = await self._client.responses.create(
+            messages = [ChatCompletionUserMessageParam(role="user", content=prompt)]
+
+            user_message = ChatCompletionUserMessageParam(role="user", content=prompt)
+            if instructions:
+                messages = [
+                    user_message,
+                    ChatCompletionSystemMessageParam(
+                        role="system", content=instructions
+                    ),
+                ]
+            else:
+                messages = [user_message]
+            completion = await self._client.chat.completions.create(
                 model=self._model,
-                instructions=instructions,
-                input=prompt,
-                temperature=0.5,
-                max_output_tokens=1000,
+                messages=messages,
+                temperature=0.3,
+                max_tokens=1500,
+                n=1,
+                timeout=120,
             )
 
-            return self._extract_text(response)
+            return self._extract_text(completion)
         except Exception as e:
             logger.error(f"Error calling Yandex GPT: {e!s}")
             raise
 
     @staticmethod
-    def _extract_text(response: Response) -> str | None:
-        for output in response.output:
-            if isinstance(output, ResponseOutputMessage):
-                for content in output.content:
-                    if isinstance(content, ResponseOutputText):
-                        return content.text
+    def _extract_text(completion: ChatCompletion) -> str | None:
+        for choice in completion.choices:
+            if isinstance(choice, Choice):
+                return choice.message.content
 
         return None
