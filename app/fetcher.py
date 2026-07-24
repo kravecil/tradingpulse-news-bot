@@ -4,6 +4,8 @@ from typing import Optional
 
 import aiohttp
 from aiohttp import ClientError
+from bs4 import BeautifulSoup
+from trafilatura import extract
 
 logger = logging.getLogger(__name__)
 
@@ -110,3 +112,15 @@ class Fetcher:
         if last_exc is not None:
             raise last_exc
         raise RuntimeError("Unexpected failure while fetching HTML")
+
+    @staticmethod
+    def fetch_content(html: str) -> str | None:
+        soup = BeautifulSoup(html, "lxml")
+
+        post_body = soup.find("div", attrs={"data-testid": "post__body"})
+        if not post_body:
+            return
+
+        text = extract(str(post_body))
+
+        return text
